@@ -1,5 +1,5 @@
 --------------------------
-LTE Cell Scanner / Tracker
+**LTE Cell Scanner / Tracker**
 --------------------------
 
 This is a collection of tools to locate and track LTE basestation cells using
@@ -11,16 +11,8 @@ The 'CellSearch' program can be used to search for LTE carriers within a range
 of frequencies.  Once an LTE frequency has been located, 'LTE-Tracker' can be
 used to monitor and track, in realtime, any LTE cells on that frequency.
 
-The main documentation in html format can be found on the web at:
-  http://www.evrytania.com/lte-tools
-And in the doc/index.html subdirectory of this distribution.
-
-For questions, comments, or bug reports, contact James Peroulas
-james@evrytania.com, or check the bugtracker on github:
-  https://github.com/Evrytania/LTE-Cell-Scanner/issues
-
 ------
-Quick build instructions:
+**Quick build instructions**:
 ------
   cd LTE-Cell-Scanner
   mkdir build
@@ -29,12 +21,12 @@ Quick build instructions:
   make
 
 ------
-Install:
+**Install** :
 ------
   sudo make install
 
 ------
-Quick usage instructions:
+**Quick usage instructions**:
 ------
 
 Search for LTE carriers within a common LTE frequency range used in the US:
@@ -42,4 +34,60 @@ Search for LTE carriers within a common LTE frequency range used in the US:
 
 Start tracking LTE cells on frequency 739 MHz:
   LTE-Tracker -f 739000000
+
+-------
+**Command Line Options** :
+-------
+
+CellSearch -s start_frequency [optional_parameters]
+  Basic options
+    -h --help
+      print help screen
+    -v --verbose
+      increase status messages from program
+    -b --brief
+      reduce status messages from program
+    -i --device-index N
+      specify which attached RTLSDR dongle to use
+  Frequency search options:
+    -s --freq-start fs
+      frequency where cell search should start
+    -e --freq-end fe
+      frequency where cell search should end
+  Dongle LO correction options:
+    -p --ppm ppm
+      crystal remaining PPM error
+    -c --correction c
+      crystal correction factor
+  Capture buffer save/ load options:
+    -r --record
+      save captured data in the files capbuf_XXXX.it
+    -l --load
+      used data in capbuf_XXXX.it files instead of live data
+    -d --data-dir dir
+      directory where capbuf_XXXX.it files are located
+
+
+-------
+Basic Usage Instruction
+------
+
+If you don't know the center frequency of the LTE cells in your area, you will have to perform a search specifying the first and the last frequency of the band that you want the dongle to examine. See http://niviuk.free.fr/lte_band.php for a list of possible LTE bands.
+
+In the US, the band between 715MHz and 768MHz often contains LTE carriers and the following command will search all possible LTE center frequencies there:
+
+CellSearch --freq-start 715e6 --freq-end 768e6
+
+On a dual core i7-2640 with the default PPM value of 120, this search takes about 6s per center frequency. With a PPM value of 10 (which requires a crystal calibration factor as described below), the search takes about 1s per center frequency.
+
+If you know a frequency where LTE cells are located, perhaps from a previous call to CellSearch, you can specify just that frequency and the program will search for and report all cells detected on that frequency. In my location, in St. Louis, there are two LTE carriers, one for AT&T and one for Verizon. To scan for cells on those two frequencies:
+
+CellSearch --freq-start 739000000
+
+OR
+
+CellSearch --freq-start 751000000
+
+These same frequencies are known to have LTE carriers in San Francisco, Chicago, and Portland.
+
 
